@@ -49,9 +49,7 @@ This document contains the Minimum Information for Reporting of an Ontology (MIR
 
 |  | Specification |
 |---|---|
-| **Description:** | A name or description of the steps taken to develop the ontology. This should describe the overall organisation of the ontology development process. |
-| **Importance:** | MUST |
-| **Example:** | Methontology, On-To-Knowledge, Neon methodology. If no bespoke methodological framework was used, describe how the core activities of the ontology engineering lifecycle (such as ontology management, development and support) were addressed (http://onlinelibrary.wiley.com/doi/10.1002/047003033X.ch9/pdf). |
+| **Description:** | We started from a very simple representation of the domain we wanted to model : with three classes that we refined to obtain a more complete and accurate representation.|
 ----
 
 ## B. Motivation
@@ -87,17 +85,13 @@ This document contains the Minimum Information for Reporting of an Ontology (MIR
 |  | Specification |
 |---|---|
 | **Description:** | The domain or field of interest for the ontology and the boundaries, granularity of representation and coverage of the ontology. State the requirements of the ontology, such as the competency questions it should satisfy. A visualisation or tabular representation is optional, but often helpful to illustrate the scope. |
-| **Importance:** | MUST |
-| **Example:** | From the Human Phenotype Ontology NAR 2013 article "human phenotypic abnormalities." https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkt1026  |
 ----
 
 ### C.2 Development community
 
 |  | Specification |
 |---|---|
-| **Description:** | The person, group of people or organisation that actually creates the content of the ontology. This is distinct from the Ontology Owner (above) that is concerned with the management of the ontology's development. |
-| **Importance:** | MUST |
-| **Example:** | The Gene Ontology is developed by the Gene Ontology Consortium. |
+| **Description:** | The Art Movement Ontology is developed by its own authors. |
 ----
 
 ### C.3 Communication
