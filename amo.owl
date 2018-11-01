@@ -28,6 +28,20 @@
              rdfs:range :Artwork .
 
 
+###  https://github.com/thibaultdalmon/ontology/amo#hasBrush
+:hasBrush rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf :hasTools ;
+          rdfs:domain :Painting ;
+          rdfs:range :Brush .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#hasClay
+:hasClay rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf :hasTools ;
+         rdfs:domain :Sculpture ;
+         rdfs:range :Clay .
+
+
 ###  https://github.com/thibaultdalmon/ontology/amo#hasCreator
 :hasCreator rdf:type owl:ObjectProperty ;
             rdfs:subPropertyOf owl:topObjectProperty ;
@@ -36,6 +50,28 @@
                      owl:InverseFunctionalProperty ;
             rdfs:domain :Artwork ;
             rdfs:range :Artist .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#hasInstruments
+:hasInstruments rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf :hasTools ;
+                rdfs:domain :Music ;
+                rdfs:range :Instrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#hasRock
+:hasRock rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf :hasTools ;
+         rdfs:domain :Building ,
+                     :Sculpture ;
+         rdfs:range :Rock .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#hasTools
+:hasTools rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
+          rdfs:domain :Artwork ;
+          rdfs:range :Tools .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#isCreatorOf
@@ -51,9 +87,24 @@
 #    Classes
 #################################################################
 
-###  https://github.com/thibaultdalmon/ontology/amo#Architecture
-:Architecture rdf:type owl:Class ;
-              rdfs:subClassOf :Artwork .
+###  https://github.com/thibaultdalmon/ontology/amo#AcousticBass
+:AcousticBass rdf:type owl:Class ;
+              rdfs:subClassOf :AcousticInstrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#AcousticGuitar
+:AcousticGuitar rdf:type owl:Class ;
+                rdfs:subClassOf :AcousticInstrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#AcousticInstrument
+:AcousticInstrument rdf:type owl:Class ;
+                    rdfs:subClassOf :Instrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#AcousticMusic
+:AcousticMusic rdf:type owl:Class ;
+               rdfs:subClassOf :Music .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Artist
@@ -87,9 +138,24 @@
                          ] .
 
 
+###  https://github.com/thibaultdalmon/ontology/amo#Brush
+:Brush rdf:type owl:Class ;
+       rdfs:subClassOf :Tools .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Building
+:Building rdf:type owl:Class ;
+          rdfs:subClassOf :Artwork .
+
+
 ###  https://github.com/thibaultdalmon/ontology/amo#Classicism
 :Classicism rdf:type owl:Class ;
             rdfs:subClassOf :ArtisticMovement .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Clay
+:Clay rdf:type owl:Class ;
+      rdfs:subClassOf :Tools .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Dadaism
@@ -101,9 +167,55 @@
 :DomainThing rdf:type owl:Class .
 
 
+###  https://github.com/thibaultdalmon/ontology/amo#Drums
+:Drums rdf:type owl:Class ;
+       rdfs:subClassOf :AcousticInstrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#ElectricBass
+:ElectricBass rdf:type owl:Class ;
+              rdfs:subClassOf :ElectricInstrument ;
+              owl:disjointWith :ElectricGuitar .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#ElectricGuitar
+:ElectricGuitar rdf:type owl:Class ;
+                rdfs:subClassOf :ElectricInstrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#ElectricInstrument
+:ElectricInstrument rdf:type owl:Class ;
+                    rdfs:subClassOf :Instrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#ElectricMusic
+:ElectricMusic rdf:type owl:Class ;
+               rdfs:subClassOf :Music .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#ElectronicDrums
+:ElectronicDrums rdf:type owl:Class ;
+                 rdfs:subClassOf :ElectronicInstrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#ElectronicInstrument
+:ElectronicInstrument rdf:type owl:Class ;
+                      rdfs:subClassOf :Instrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#ElectronicMusic
+:ElectronicMusic rdf:type owl:Class ;
+                 rdfs:subClassOf :Music .
+
+
 ###  https://github.com/thibaultdalmon/ontology/amo#Impressionism
 :Impressionism rdf:type owl:Class ;
                rdfs:subClassOf :ArtisticMovement .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Instrument
+:Instrument rdf:type owl:Class ;
+            rdfs:subClassOf :Tools .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Music
@@ -121,6 +233,16 @@
           rdfs:subClassOf :Artwork .
 
 
+###  https://github.com/thibaultdalmon/ontology/amo#Piano
+:Piano rdf:type owl:Class ;
+       rdfs:subClassOf :AcousticInstrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Rock
+:Rock rdf:type owl:Class ;
+      rdfs:subClassOf :Tools .
+
+
 ###  https://github.com/thibaultdalmon/ontology/amo#Romantism
 :Romantism rdf:type owl:Class ;
            rdfs:subClassOf :ArtisticMovement .
@@ -131,8 +253,23 @@
            rdfs:subClassOf :Artwork .
 
 
+###  https://github.com/thibaultdalmon/ontology/amo#Synthesizer
+:Synthesizer rdf:type owl:Class ;
+             rdfs:subClassOf :ElectronicInstrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Tools
+:Tools rdf:type owl:Class ;
+       rdfs:subClassOf :DomainThing .
+
+
 ###  https://github.com/thibaultdalmon/ontology/amo#ValueThing
 :ValueThing rdf:type owl:Class .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Violin
+:Violin rdf:type owl:Class ;
+        rdfs:subClassOf :AcousticInstrument .
 
 
 #################################################################
@@ -168,7 +305,41 @@
 #################################################################
 
 [ rdf:type owl:AllDisjointClasses ;
-  owl:members ( :Architecture
+  owl:members ( :AcousticGuitar
+                :Piano
+                :Violin
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :AcousticMusic
+                :ElectricMusic
+                :ElectronicMusic
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Artist
+                :ArtisticMovement
+                :Artwork
+                :Tools
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Brush
+                :Clay
+                :Instrument
+                :Rock
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Building
                 :Music
                 :Painting
                 :Sculpture
