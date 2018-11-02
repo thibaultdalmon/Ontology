@@ -12,6 +12,13 @@
 #    Object Properties
 #################################################################
 
+###  https://github.com/thibaultdalmon/ontology/amo#hasAcousticInstruments
+:hasAcousticInstruments rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf :hasInstruments ;
+                        rdfs:domain :AcousticMusic ;
+                        rdfs:range :AcousticInstrument .
+
+
 ###  https://github.com/thibaultdalmon/ontology/amo#hasArtisticMovement
 :hasArtisticMovement rdf:type owl:ObjectProperty ;
                      rdfs:subPropertyOf owl:topObjectProperty ;
@@ -31,6 +38,7 @@
 ###  https://github.com/thibaultdalmon/ontology/amo#hasBrush
 :hasBrush rdf:type owl:ObjectProperty ;
           rdfs:subPropertyOf :hasTools ;
+          owl:inverseOf :isUsedToPaint ;
           rdfs:domain :Painting ;
           rdfs:range :Brush .
 
@@ -38,8 +46,17 @@
 ###  https://github.com/thibaultdalmon/ontology/amo#hasClay
 :hasClay rdf:type owl:ObjectProperty ;
          rdfs:subPropertyOf :hasTools ;
+         owl:inverseOf :isUsedToShape ;
          rdfs:domain :Sculpture ;
          rdfs:range :Clay .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#hasCrane
+:hasCrane rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf :hasTools ;
+          owl:inverseOf :isUsedToBuild ;
+          rdfs:domain :Building ;
+          rdfs:range :Crane .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#hasCreator
@@ -52,9 +69,24 @@
             rdfs:range :Artist .
 
 
+###  https://github.com/thibaultdalmon/ontology/amo#hasElectricInstruments
+:hasElectricInstruments rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf :hasInstruments ;
+                        rdfs:domain :ElectricMusic ;
+                        rdfs:range :ElectricInstrument .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#hasElectronicInstruments
+:hasElectronicInstruments rdf:type owl:ObjectProperty ;
+                          rdfs:subPropertyOf :hasInstruments ;
+                          rdfs:domain :ElectronicMusic ;
+                          rdfs:range :ElectronicInstrument .
+
+
 ###  https://github.com/thibaultdalmon/ontology/amo#hasInstruments
 :hasInstruments rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf :hasTools ;
+                owl:inverseOf :isUsedToPlay ;
                 rdfs:domain :Music ;
                 rdfs:range :Instrument .
 
@@ -62,14 +94,26 @@
 ###  https://github.com/thibaultdalmon/ontology/amo#hasRock
 :hasRock rdf:type owl:ObjectProperty ;
          rdfs:subPropertyOf :hasTools ;
-         rdfs:domain :Building ,
-                     :Sculpture ;
+         owl:inverseOf :isUsedToBuildAsMaterial ;
+         rdfs:domain [ rdf:type owl:Class ;
+                       owl:unionOf ( :Building
+                                     :Sculpture
+                                   )
+                     ] ;
          rdfs:range :Rock .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#hasTimeValue
+:hasTimeValue rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
+              rdfs:domain :DomainThing ;
+              rdfs:range :TimeValuePartition .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#hasTools
 :hasTools rdf:type owl:ObjectProperty ;
           rdfs:subPropertyOf owl:topObjectProperty ;
+          owl:inverseOf :isUsedIn ;
           rdfs:domain :Artwork ;
           rdfs:range :Tools .
 
@@ -81,6 +125,63 @@
                       owl:InverseFunctionalProperty ;
              rdfs:domain :Artist ;
              rdfs:range :Artwork .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#isUsedIn
+:isUsedIn rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
+          rdfs:domain :Tools ;
+          rdfs:range :Artwork .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#isUsedToBuild
+:isUsedToBuild rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf :isUsedIn ;
+               rdfs:domain :Crane ;
+               rdfs:range :Building .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#isUsedToBuildAsMaterial
+:isUsedToBuildAsMaterial rdf:type owl:ObjectProperty ;
+                         rdfs:subPropertyOf :isUsedIn ;
+                         rdfs:domain :Rock ;
+                         rdfs:range [ rdf:type owl:Class ;
+                                      owl:unionOf ( :Building
+                                                    :Sculpture
+                                                  )
+                                    ] .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#isUsedToPaint
+:isUsedToPaint rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf :isUsedIn ;
+               rdfs:domain :Brush ;
+               rdfs:range :Painting .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#isUsedToPlay
+:isUsedToPlay rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf :isUsedIn ;
+              rdfs:domain :Instrument ;
+              rdfs:range :Music .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#isUsedToShape
+:isUsedToShape rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf :isUsedIn ;
+               rdfs:domain :Clay ;
+               rdfs:range :Sculpture .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  https://github.com/thibaultdalmon/ontology/amo#hasPrice
+:hasPrice rdf:type owl:DatatypeProperty ;
+          rdfs:subPropertyOf owl:topDataProperty ;
+          rdfs:domain :Artwork ;
+          rdfs:range xsd:unsignedInt .
 
 
 #################################################################
@@ -99,72 +200,192 @@
 
 ###  https://github.com/thibaultdalmon/ontology/amo#AcousticInstrument
 :AcousticInstrument rdf:type owl:Class ;
-                    rdfs:subClassOf :Instrument .
+                    owl:equivalentClass [ owl:intersectionOf ( :Instrument
+                                                               [ rdf:type owl:Restriction ;
+                                                                 owl:onProperty :isUsedToPlay ;
+                                                                 owl:someValuesFrom :AcousticMusic
+                                                               ]
+                                                             ) ;
+                                          rdf:type owl:Class
+                                        ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#AcousticMusic
 :AcousticMusic rdf:type owl:Class ;
-               rdfs:subClassOf :Music .
+               owl:equivalentClass [ owl:intersectionOf ( :Music
+                                                          [ rdf:type owl:Restriction ;
+                                                            owl:onProperty :hasInstruments ;
+                                                            owl:allValuesFrom :AcousticInstrument
+                                                          ]
+                                                        ) ;
+                                     rdf:type owl:Class
+                                   ] .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#After20th
+:After20th rdf:type owl:Class ;
+           rdfs:subClassOf :TimeValuePartition .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Artist
 :Artist rdf:type owl:Class ;
-        rdfs:subClassOf :DomainThing ,
-                        [ rdf:type owl:Restriction ;
-                          owl:onProperty :isCreatorOf ;
-                          owl:someValuesFrom :Artwork
-                        ] .
+        owl:equivalentClass [ owl:intersectionOf ( :DomainThing
+                                                   [ rdf:type owl:Restriction ;
+                                                     owl:onProperty :isCreatorOf ;
+                                                     owl:someValuesFrom :Artwork
+                                                   ]
+                                                   [ rdf:type owl:Restriction ;
+                                                     owl:onProperty :hasTimeValue ;
+                                                     owl:cardinality "1"^^xsd:nonNegativeInteger
+                                                   ]
+                                                 ) ;
+                              rdf:type owl:Class
+                            ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#ArtisticMovement
 :ArtisticMovement rdf:type owl:Class ;
-                  rdfs:subClassOf :DomainThing ,
-                                  [ rdf:type owl:Restriction ;
-                                    owl:onProperty :hasArtworks ;
-                                    owl:someValuesFrom :Artwork
-                                  ] .
+                  owl:equivalentClass [ owl:intersectionOf ( :DomainThing
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty :hasArtworks ;
+                                                               owl:someValuesFrom :Artwork
+                                                             ]
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty :hasTimeValue ;
+                                                               owl:cardinality "1"^^xsd:nonNegativeInteger
+                                                             ]
+                                                           ) ;
+                                        rdf:type owl:Class
+                                      ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Artwork
 :Artwork rdf:type owl:Class ;
-         rdfs:subClassOf :DomainThing ,
-                         [ rdf:type owl:Restriction ;
-                           owl:onProperty :hasArtisticMovement ;
-                           owl:someValuesFrom :ArtisticMovement
-                         ] ,
-                         [ rdf:type owl:Restriction ;
-                           owl:onProperty :hasCreator ;
-                           owl:someValuesFrom :Artist
-                         ] .
+         owl:equivalentClass [ owl:intersectionOf ( :DomainThing
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :hasArtisticMovement ;
+                                                      owl:someValuesFrom :ArtisticMovement
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :hasCreator ;
+                                                      owl:someValuesFrom :Artist
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :hasTools ;
+                                                      owl:someValuesFrom :Tools
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :hasTimeValue ;
+                                                      owl:cardinality "1"^^xsd:nonNegativeInteger
+                                                    ]
+                                                    [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :hasPrice ;
+                                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                      owl:onDataRange xsd:unsignedInt
+                                                    ]
+                                                  ) ;
+                               rdf:type owl:Class
+                             ] .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Before17th
+:Before17th rdf:type owl:Class ;
+            rdfs:subClassOf :TimeValuePartition .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Between17thAnd20th
+:Between17thAnd20th rdf:type owl:Class ;
+                    rdfs:subClassOf :TimeValuePartition .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Brush
 :Brush rdf:type owl:Class ;
-       rdfs:subClassOf :Tools .
+       rdfs:subClassOf :Tools ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :isUsedToPaint ;
+                         owl:someValuesFrom :Painting
+                       ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Building
 :Building rdf:type owl:Class ;
-          rdfs:subClassOf :Artwork .
+          owl:equivalentClass [ owl:intersectionOf ( :Artwork
+                                                     [ rdf:type owl:Class ;
+                                                       owl:unionOf ( [ rdf:type owl:Restriction ;
+                                                                       owl:onProperty :hasCrane ;
+                                                                       owl:someValuesFrom :Crane
+                                                                     ]
+                                                                     [ rdf:type owl:Restriction ;
+                                                                       owl:onProperty :hasRock ;
+                                                                       owl:someValuesFrom :Rock
+                                                                     ]
+                                                                   )
+                                                     ]
+                                                   ) ;
+                                rdf:type owl:Class
+                              ] ;
+          owl:disjointWith :Painting .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Classicism
 :Classicism rdf:type owl:Class ;
-            rdfs:subClassOf :ArtisticMovement .
+            rdfs:subClassOf :ArtisticMovement ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :hasTimeValue ;
+                              owl:allValuesFrom :Before17th
+                            ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Clay
 :Clay rdf:type owl:Class ;
-      rdfs:subClassOf :Tools .
+      rdfs:subClassOf :Tools ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :isUsedToShape ;
+                        owl:someValuesFrom :Sculpture
+                      ] .
 
 
-###  https://github.com/thibaultdalmon/ontology/amo#Dadaism
-:Dadaism rdf:type owl:Class ;
-         rdfs:subClassOf :ArtisticMovement .
+###  https://github.com/thibaultdalmon/ontology/amo#Contemporary
+:Contemporary rdf:type owl:Class ;
+              rdfs:subClassOf :ArtisticMovement ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :hasTimeValue ;
+                                owl:allValuesFrom :After20th
+                              ] .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Crane
+:Crane rdf:type owl:Class ;
+       rdfs:subClassOf :Tools ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :isUsedToBuild ;
+                         owl:someValuesFrom :Building
+                       ] .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#Dadaïsm
+:Dadaïsm rdf:type owl:Class ;
+         rdfs:subClassOf :ArtisticMovement ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasArtworks ;
+                           owl:allValuesFrom [ rdf:type owl:Class ;
+                                               owl:unionOf ( :Painting
+                                                             :Sculpture
+                                                           )
+                                             ]
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasTimeValue ;
+                           owl:allValuesFrom :After20th
+                         ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#DomainThing
-:DomainThing rdf:type owl:Class .
+:DomainThing rdf:type owl:Class ;
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasTimeValue ;
+                               owl:someValuesFrom :TimeValuePartition
+                             ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Drums
@@ -185,52 +406,122 @@
 
 ###  https://github.com/thibaultdalmon/ontology/amo#ElectricInstrument
 :ElectricInstrument rdf:type owl:Class ;
-                    rdfs:subClassOf :Instrument .
+                    owl:equivalentClass [ owl:intersectionOf ( :Instrument
+                                                               [ rdf:type owl:Restriction ;
+                                                                 owl:onProperty :isUsedToPlay ;
+                                                                 owl:someValuesFrom :ElectricMusic
+                                                               ]
+                                                             ) ;
+                                          rdf:type owl:Class
+                                        ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#ElectricMusic
 :ElectricMusic rdf:type owl:Class ;
-               rdfs:subClassOf :Music .
+               owl:equivalentClass [ owl:intersectionOf ( :Music
+                                                          [ rdf:type owl:Restriction ;
+                                                            owl:onProperty :hasElectricInstruments ;
+                                                            owl:someValuesFrom :ElectricInstrument
+                                                          ]
+                                                        ) ;
+                                     rdf:type owl:Class
+                                   ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#ElectronicDrums
 :ElectronicDrums rdf:type owl:Class ;
-                 rdfs:subClassOf :ElectronicInstrument .
+                 rdfs:subClassOf :ElectronicInstrument ;
+                 owl:disjointWith :Synthesizer .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#ElectronicInstrument
 :ElectronicInstrument rdf:type owl:Class ;
-                      rdfs:subClassOf :Instrument .
+                      owl:equivalentClass [ owl:intersectionOf ( :Instrument
+                                                                 [ rdf:type owl:Restriction ;
+                                                                   owl:onProperty :isUsedToPlay ;
+                                                                   owl:someValuesFrom :ElectronicMusic
+                                                                 ]
+                                                               ) ;
+                                            rdf:type owl:Class
+                                          ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#ElectronicMusic
 :ElectronicMusic rdf:type owl:Class ;
-                 rdfs:subClassOf :Music .
+                 owl:equivalentClass [ owl:intersectionOf ( :Music
+                                                            [ rdf:type owl:Restriction ;
+                                                              owl:onProperty :hasElectronicInstruments ;
+                                                              owl:someValuesFrom :ElectronicInstrument
+                                                            ]
+                                                          ) ;
+                                       rdf:type owl:Class
+                                     ] .
 
 
-###  https://github.com/thibaultdalmon/ontology/amo#Impressionism
-:Impressionism rdf:type owl:Class ;
-               rdfs:subClassOf :ArtisticMovement .
+###  https://github.com/thibaultdalmon/ontology/amo#ExpensivePainting
+:ExpensivePainting rdf:type owl:Class ;
+                   owl:equivalentClass [ owl:intersectionOf ( :Painting
+                                                              [ rdf:type owl:Class ;
+                                                                owl:unionOf ( [ rdf:type owl:Restriction ;
+                                                                                owl:onProperty :hasCreator ;
+                                                                                owl:hasValue :Miro
+                                                                              ]
+                                                                              [ rdf:type owl:Restriction ;
+                                                                                owl:onProperty :hasCreator ;
+                                                                                owl:hasValue :Picasso
+                                                                              ]
+                                                                              [ rdf:type owl:Restriction ;
+                                                                                owl:onProperty :hasPrice ;
+                                                                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                                                owl:onDataRange [ rdf:type rdfs:Datatype ;
+                                                                                                  owl:onDatatype xsd:unsignedInt ;
+                                                                                                  owl:withRestrictions ( [ xsd:minInclusive "50000"^^xsd:unsignedInt
+                                                                                                                         ]
+                                                                                                                       )
+                                                                                                ]
+                                                                              ]
+                                                                            )
+                                                              ]
+                                                            ) ;
+                                         rdf:type owl:Class
+                                       ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Instrument
 :Instrument rdf:type owl:Class ;
-            rdfs:subClassOf :Tools .
+            owl:equivalentClass [ owl:intersectionOf ( :Tools
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty :isUsedToPlay ;
+                                                         owl:someValuesFrom :Music
+                                                       ]
+                                                     ) ;
+                                  rdf:type owl:Class
+                                ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Music
 :Music rdf:type owl:Class ;
-       rdfs:subClassOf :Artwork .
-
-
-###  https://github.com/thibaultdalmon/ontology/amo#Naturalism
-:Naturalism rdf:type owl:Class ;
-            rdfs:subClassOf :ArtisticMovement .
+       owl:equivalentClass [ owl:intersectionOf ( :Artwork
+                                                  [ rdf:type owl:Restriction ;
+                                                    owl:onProperty :hasInstruments ;
+                                                    owl:someValuesFrom :Instrument
+                                                  ]
+                                                ) ;
+                             rdf:type owl:Class
+                           ] ;
+       owl:disjointWith :Painting .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Painting
 :Painting rdf:type owl:Class ;
-          rdfs:subClassOf :Artwork .
+          owl:equivalentClass [ owl:intersectionOf ( :Artwork
+                                                     [ rdf:type owl:Restriction ;
+                                                       owl:onProperty :hasBrush ;
+                                                       owl:someValuesFrom :Brush
+                                                     ]
+                                                   ) ;
+                                rdf:type owl:Class
+                              ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Piano
@@ -240,17 +531,58 @@
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Rock
 :Rock rdf:type owl:Class ;
-      rdfs:subClassOf :Tools .
+      rdfs:subClassOf :Tools ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :isUsedToBuildAsMaterial ;
+                        owl:someValuesFrom :Building
+                      ] .
+
+
+###  https://github.com/thibaultdalmon/ontology/amo#RockNRoll
+:RockNRoll rdf:type owl:Class ;
+           rdfs:subClassOf :ArtisticMovement ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasArtworks ;
+                             owl:allValuesFrom :ElectricMusic
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasTimeValue ;
+                             owl:allValuesFrom :After20th
+                           ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Romantism
 :Romantism rdf:type owl:Class ;
-           rdfs:subClassOf :ArtisticMovement .
+           rdfs:subClassOf :ArtisticMovement ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasArtworks ;
+                             owl:allValuesFrom [ rdf:type owl:Class ;
+                                                 owl:unionOf ( :Music
+                                                               :Painting
+                                                               :Sculpture
+                                                             )
+                                               ]
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasTimeValue ;
+                             owl:allValuesFrom :Between17thAnd20th
+                           ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Sculpture
 :Sculpture rdf:type owl:Class ;
-           rdfs:subClassOf :Artwork .
+           rdfs:subClassOf :Artwork ,
+                           [ rdf:type owl:Class ;
+                             owl:unionOf ( [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasClay ;
+                                             owl:someValuesFrom :Clay
+                                           ]
+                                           [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasRock ;
+                                             owl:someValuesFrom :Rock
+                                           ]
+                                         )
+                           ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#Synthesizer
@@ -258,9 +590,24 @@
              rdfs:subClassOf :ElectronicInstrument .
 
 
+###  https://github.com/thibaultdalmon/ontology/amo#TimeValuePartition
+:TimeValuePartition rdf:type owl:Class ;
+                    owl:equivalentClass [ rdf:type owl:Class ;
+                                          owl:unionOf ( :After20th
+                                                        :Before17th
+                                                        :Between17thAnd20th
+                                                      )
+                                        ] ;
+                    rdfs:subClassOf :ValueThing .
+
+
 ###  https://github.com/thibaultdalmon/ontology/amo#Tools
 :Tools rdf:type owl:Class ;
-       rdfs:subClassOf :DomainThing .
+       rdfs:subClassOf :DomainThing ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :isUsedIn ;
+                         owl:someValuesFrom :Artwork
+                       ] .
 
 
 ###  https://github.com/thibaultdalmon/ontology/amo#ValueThing
@@ -276,33 +623,39 @@
 #    Individuals
 #################################################################
 
-###  https://github.com/thibaultdalmon/ontology/amo#16AndBefore
-<https://github.com/thibaultdalmon/ontology/amo#16AndBefore> rdf:type owl:NamedIndividual .
+###  https://github.com/thibaultdalmon/ontology/amo#Miro
+:Miro rdf:type owl:NamedIndividual ,
+               :Artist .
 
 
-###  https://github.com/thibaultdalmon/ontology/amo#17
-<https://github.com/thibaultdalmon/ontology/amo#17> rdf:type owl:NamedIndividual .
+###  https://github.com/thibaultdalmon/ontology/amo#Nicolas_Scotto_Di_Perto
+:Nicolas_Scotto_Di_Perto rdf:type owl:NamedIndividual ,
+                                  :Artist .
 
 
-###  https://github.com/thibaultdalmon/ontology/amo#18
-<https://github.com/thibaultdalmon/ontology/amo#18> rdf:type owl:NamedIndividual .
+###  https://github.com/thibaultdalmon/ontology/amo#Picasso
+:Picasso rdf:type owl:NamedIndividual ,
+                  :Artist .
 
 
-###  https://github.com/thibaultdalmon/ontology/amo#19
-<https://github.com/thibaultdalmon/ontology/amo#19> rdf:type owl:NamedIndividual .
-
-
-###  https://github.com/thibaultdalmon/ontology/amo#20
-<https://github.com/thibaultdalmon/ontology/amo#20> rdf:type owl:NamedIndividual .
-
-
-###  https://github.com/thibaultdalmon/ontology/amo#21
-<https://github.com/thibaultdalmon/ontology/amo#21> rdf:type owl:NamedIndividual .
+###  https://github.com/thibaultdalmon/ontology/amo#Thibault_Dalmon
+:Thibault_Dalmon rdf:type owl:NamedIndividual ,
+                          :Artist .
 
 
 #################################################################
 #    General axioms
 #################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :AcousticBass
+                :AcousticGuitar
+                :Drums
+                :Piano
+                :Violin
+              )
+] .
+
 
 [ rdf:type owl:AllDisjointClasses ;
   owl:members ( :AcousticGuitar
@@ -313,9 +666,25 @@
 
 
 [ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :AcousticInstrument
+                :ElectricInstrument
+                :ElectronicInstrument
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
   owl:members ( :AcousticMusic
                 :ElectricMusic
                 :ElectronicMusic
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :After20th
+                :Before17th
+                :Between17thAnd20th
               )
 ] .
 
@@ -332,6 +701,7 @@
 [ rdf:type owl:AllDisjointClasses ;
   owl:members ( :Brush
                 :Clay
+                :Crane
                 :Instrument
                 :Rock
               )
@@ -339,10 +709,11 @@
 
 
 [ rdf:type owl:AllDisjointClasses ;
-  owl:members ( :Building
-                :Music
-                :Painting
-                :Sculpture
+  owl:members ( :Classicism
+                :Contemporary
+                :Dadaïsm
+                :RockNRoll
+                :Romantism
               )
 ] .
 
